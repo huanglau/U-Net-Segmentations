@@ -1,0 +1,4 @@
+../ExampleSegmentations/sky/data/Pat1,../ExampleSegmentations/sky/groundtruth/Pat1
+../ExampleSegmentations/sky/data/Pat2,../ExampleSegmentations/sky/groundtruth/Pat2
+../ExampleSegmentations/sky/data/Pat3,../ExampleSegmentations/sky/groundtruth/Pat3
+../ExampleSegmentations/sky/data/Pat4,../ExampleSegmentations/sky/groundtruth/Pat4
