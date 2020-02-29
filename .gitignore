@@ -1,2 +1,5 @@
-.spyproject/
+.spyproject*
 */*.ini
+*.pyc
+*.pyo
+__pycache__
