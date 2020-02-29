@@ -176,6 +176,8 @@ def main(sConfigFileDir, ithFold, iNumFoldsTotal):
         contains error metrics from experiment
 
     """
+    if ithFold >= iNumFoldsTotal:
+        raise ValueError('cannot do {}th fold when there are only {} folds in total'.format(ithFold, iNumFoldsTotal))
     if os.path.exists(sConfigFileDir) != True:
         raise ValueError('{} not found'.format(sConfigFileDir))
     
@@ -209,4 +211,6 @@ if __name__ == "__main__":
     main(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))
     
 
-# main('config_segmentation.ini', 1, 2)
+# uncomment this if you are running an experiment not in command line
+# if you want to run a 1fold experiment  use the following line
+# main('config_segmentation.ini', 0, 1)
