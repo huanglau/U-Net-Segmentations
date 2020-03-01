@@ -50,6 +50,9 @@ def GenerateFeatureMaps(lLayerNames, iImgsPerRow, sOutDir, activations, bSave):
         scale = 1. / iSize
         plt.figure(figsize =(scale * npAllFeatureMaps.shape[1], scale * npAllFeatureMaps.shape[0]))
         plt.title(sLayerName)
+        # remove axis scales
+        plt.xticks([])
+        plt.yticks([])
         plt.imshow(npAllFeatureMaps, aspect='auto', cmap='viridis')
         iLayerNum +=1
         if bSave :
