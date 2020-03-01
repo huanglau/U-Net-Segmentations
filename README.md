@@ -43,3 +43,4 @@ Error map. Red pixels are false positives, blue false negatives, black true nega
 
 Feature map extracted from the second convolutional layer in the model
 ![Extracted feature map from first convolution](/ExampleSegmentations/ErrorMaps/0conv2d_1.png)
+
