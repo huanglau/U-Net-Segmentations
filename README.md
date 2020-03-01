@@ -11,7 +11,7 @@ Datase can be found https://www.ime.usp.br/~eduardob/datasets/sky/.
 To run this code through the command line or terminal navigate to the directory with the code.
 You should be in the same directory where 'foldsetup_configReader.py' is stored.
 
-Then you can run the bash script './NFold.sh' in unix systems or 'NFold.bat' in windows systems.
+Then you can run the bash script **'./NFold.sh'** in unix systems or **'NFold.bat'** in windows systems.
 
 This will run the experiment specified in 'config_segmentation.ini'. This file contains the number of epochs, the type of model, augmentations, the directories to  the training images etc. This config file is setup to output the exeperiment '../../Output/PlaneSegmentation' so up two directories from where /src/ is.
 
@@ -30,3 +30,17 @@ Data/InputImg/Patient3, Data/Mask/Patient3
 Keras's imagedatagenerator function was modified to account for that.
 
 You also need to insure that the image pairs (input and mask) have matching names. They don't have to be identical, but when these images are read by the imagedatagenerator function, if the alphanumeric sorting of the images are different (between input images and masks), they will not be properly paired
+
+
+# example output error maps
+Here is an example sky/ground segmentation
+
+Input Image. 
+![InputImage](/ExampleSegmentations/ErrorMaps/0056_Input.png)
+
+Error map. Red pixels are false positives, blue false negatives, black true negatives and white true positives.
+![Error map](/ExampleSegmentations/ErrorMaps/0056nucleus_predMap.png)
+
+Feature map extracted from the second convolutional layer in the model
+![Extracted feature map from first convolution](/ExampleSegmentations/ErrorMaps/0conv2d_1.png)
+
