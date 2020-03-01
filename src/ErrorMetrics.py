@@ -12,6 +12,85 @@ import pandas as pd
 import numpy as np 
 from . import IO as IO
 import src.ImageObject as image
+import keras
+import matplotlib.pyplot as plt
+
+def GenerateFeatureMaps(lLayerNames, iImgsPerRow, sOutDir, activations, bSave):
+
+    # index to name layer. This will increase by one each iteration. Used to keep 
+    # feature maps in order
+    iLayerNum = 0
+    # loop through layers
+    for sLayerName, npLayerActivation in zip(lLayerNames, activations): 
+         # Number of features in the feature map
+        iNumFeatures = np.shape(npLayerActivation)[-1]
+        # get size of feature map. Assumes square images
+        iSize = np.shape(npLayerActivation)[1]
+        iNumCols = iNumFeatures // iImgsPerRow 
+        # add condition if there is only one row of feature maps. This is needed for
+        # layers where there only a few kernels
+        if iNumCols == 0: 
+            iNumCols = 1
+        # add condition where there's not enough images to fit the number of columns
+        if iImgsPerRow > npLayerActivation.shape[3]:
+            iImgsPerRow = npLayerActivation.shape[3]
+            
+        npAllFeatureMaps = np.zeros((iSize * iNumCols , iImgsPerRow * iSize))
+        # loop through each feature map in a layer
+        for iCol in range(iNumCols): 
+            for iRow in range(iImgsPerRow):
+                npFeatureMap = npLayerActivation[0, :, :, iCol * iImgsPerRow + iRow]
+                # normalize image between [0,1]
+                npFeatureMap -= npFeatureMap.min()
+                npFeatureMap /= npFeatureMap.max()
+                # multiply to create 8 bit image
+                npFeatureMap = np.clip(npFeatureMap*255, 0, 255).astype('uint8')
+                # fill in the feature grid with the feature map
+                npAllFeatureMaps[iCol * iSize : (iCol + 1) * iSize, iRow * iSize : (iRow + 1) * iSize] = npFeatureMap
+        scale = 1. / iSize
+        plt.figure(figsize =(scale * npAllFeatureMaps.shape[1], scale * npAllFeatureMaps.shape[0]))
+        plt.title(sLayerName)
+        plt.imshow(npAllFeatureMaps, aspect='auto', cmap='viridis')
+        iLayerNum +=1
+        if bSave :
+            plt.savefig(os.path.join(sOutDir, str(iLayerNum) + sLayerName +'.png'), dpi = 300)
+        else:
+            plt.show()
+        plt.clf()
+
+
+
+def VisualizeLayersSingleInput(inModel, TestData, sOutDir, iStartLayer = 1, bSave = True):
+    """ output plots that visualize the layers in a network. Outputs feature maps
+    iNumInputs: useful for networks that take in multiple inputs
+    Visualizes the iLayer.
+    
+    start layer needs to be specified to skip the input layer
+    
+    example syntax:
+        VisualizeLayersSingleInput(Model, 6, [[te_pairs[1, 0]], [te_pairs[1, 1]]] )
+    """
+    # get list of layer names
+    lLayerNames = []
+    lLayerNames = [layer.name for layer in inModel.layers[iStartLayer:]]
+    images_per_row = 16
+    
+    # get all the outputs of each layer
+    lLayerOutput = [layer.output for layer in inModel.layers[iStartLayer:]]
+    
+    # use the model we already have, and get outputs at each layer
+    SplitModel = keras.Model(inputs=inModel.input,  outputs=lLayerOutput) # Creates a model that will return these outputs, given the model input
+
+    # get feature maps
+    activations = SplitModel.predict([[TestData[0][0][:,:,0:3]]])
+    if not os.path.exists(os.path.join(sOutDir, 'FeatureMaps')):    
+        os.makedirs(os.path.join(sOutDir, 'FeatureMaps'),exist_ok=True)
+    
+    # plot feature maps
+    GenerateFeatureMaps(lLayerNames, images_per_row, os.path.join(sOutDir, 'FeatureMaps'), activations, bSave)
+    return activations
+
+
 #%% error metric functions
 
 def Thresh(npImage, fThreshVal = 0.5):
@@ -215,6 +294,9 @@ def PredictionErrorPerClass(sOutDir, npTestDir, Model, iImageSize, lRange, NewSi
             else:
                 pdConf = IO.SavePredImgs(sOutDir, npResults[:iNumSave,:,:,:], TruthInputGen, TruthMaskGen, lRange = lRange)
             dfError = dfError.append(pdConf) 
-
+        # visualize one test case      
+        npTest = TruthInputGen.next()
+        VisualizeLayersSingleInput(Model, [npTest[0]], sOutDir = os.path.join(sOutDir, 'FeatureMaps'), bSave = True)
+        
     dfError.to_csv(os.path.join(sOutDir, 'ErrorMetrics.csv'))                    
     return dfError
