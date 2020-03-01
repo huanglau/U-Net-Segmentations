@@ -36,11 +36,11 @@ You also need to insure that the image pairs (input and mask) have matching name
 Here is an example sky/ground segmentation
 
 Input Image. 
-![InputImage](/ExampleSegmentations/ErrorMaps/0056_Input.png)
+![InputImage](/ExampleSegmentations/ErrorMaps/0036_Input.png)
 
 Error map. Red pixels are false positives, blue false negatives, black true negatives and white true positives.
-![Error map](/ExampleSegmentations/ErrorMaps/0056nucleus_predMap.png)
+![Error map](/ExampleSegmentations/ErrorMaps/0036nucleus_predMap.png)
 
 Feature map extracted from the second convolutional layer in the model
-![Extracted feature map from first convolution](/ExampleSegmentations/ErrorMaps/0conv2d_1.png)
+![Extracted feature map from first convolution](/ExampleSegmentations/ErrorMaps/1conv2d_1.png)
 
