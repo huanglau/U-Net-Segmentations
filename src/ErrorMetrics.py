@@ -42,7 +42,7 @@ def GenerateFeatureMaps(lLayerNames, iImgsPerRow, sOutDir, activations, bSave):
                 npFeatureMap = npLayerActivation[0, :, :, iCol * iImgsPerRow + iRow]
                 # normalize image between [0,1]
                 npFeatureMap -= npFeatureMap.min()
-                npFeatureMap /= npFeatureMap.max()
+                npFeatureMap /= (npFeatureMap.max() + 1e-12)
                 # multiply to create 8 bit image
                 npFeatureMap = np.clip(npFeatureMap*255, 0, 255).astype('uint8')
                 # fill in the feature grid with the feature map
@@ -292,14 +292,19 @@ def PredictionErrorPerClass(sOutDir, npTestDir, Model, iImageSize, lRange, NewSi
                 npResults = Model.predict_generator(TruthInputGen, steps = iNumPredict, verbose=1)
                 
             # save prediction images and generate error metrics
-            if iNumSave > TruthInputGen.n:
+            if iNumSave > TruthInputGen.n or iNumSave == 'All':
                 pdConf = IO.SavePredImgs(sOutDir, npResults, TruthInputGen, TruthMaskGen, lRange = lRange) # save 30 samples
             else:
                 pdConf = IO.SavePredImgs(sOutDir, npResults[:iNumSave,:,:,:], TruthInputGen, TruthMaskGen, lRange = lRange)
             dfError = dfError.append(pdConf) 
         # visualize one test case      
         npTest = TruthInputGen.next()
-        VisualizeLayersSingleInput(Model, [npTest[0]], sOutDir = os.path.join(sOutDir, 'FeatureMaps'), bSave = True)
+        npTest = TruthInputGen.next()        
+        try:
+            VisualizeLayersSingleInput(Model, [npTest[0]], sOutDir = os.path.join(sOutDir, 'FeatureMaps'), bSave = True)
+        except:
+            print("feature maps not generated")
+            continue
         
     dfError.to_csv(os.path.join(sOutDir, 'ErrorMetrics.csv'))                    
     return dfError

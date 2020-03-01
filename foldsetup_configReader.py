@@ -205,12 +205,12 @@ def main(sConfigFileDir, ithFold, iNumFoldsTotal):
 # if you are doing N fold cross validation it is better to call python from the command line
 # this is so that the keras 'session' is fully reset each fold, and GPU memory is fully released
 # There are methods to clear keras in the script but I"m usure if it's been debugged properly yet
-# if __name__ == "__main__":
-#     """ (classes, sDirList, iSeed, sOutDir)
-#     """  
-#     main(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))
+if __name__ == "__main__":
+    """ (classes, sDirList, iSeed, sOutDir)
+    """  
+    main(sys.argv[1], int(sys.argv[2]), int(sys.argv[3]))
     
 
 # uncomment this if you are running an experiment not in command line
 # if you want to run a 1fold experiment  use the following line
-main('config_segmentation.ini', 0, 2)
+# main('config_segmentation.ini', 0, 2)
