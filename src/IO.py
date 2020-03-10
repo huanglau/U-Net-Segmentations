@@ -119,7 +119,7 @@ def SavePredImgs(save_path, npPredImgs, GenTestInput, GenTestMask, lRange, lTiss
     """ Saves images, and the input and truth images
     """
     lLabels = ['TP','TN','FP','FN']
-    pdConf = pd.DataFrame(columns = ['imagepath', 'fpr', 'fnr', 'auc', 'f1', 'recall', 'precision', 'Error Rate', 'optimal threshold', 'sensitivity', 'specificity', 'TN', 'TP', 'FP', 'FN'])
+    dfConf = pd.DataFrame(columns = ['imagepath', 'fpr', 'fnr', 'auc', 'f1', 'recall', 'precision', 'Error Rate', 'optimal threshold', 'sensitivity', 'specificity', 'TN', 'TP', 'FP', 'FN'])
     
     # iterate through the prediction images
     for i, npImg in enumerate(npPredImgs):
@@ -149,7 +149,7 @@ def SavePredImgs(save_path, npPredImgs, GenTestInput, GenTestMask, lRange, lTiss
         optThresh = Error.OptimalThreshAUC(fpr, tpr, thresholds)
         FNR, FPR = Error.GenFNRFPR(Error.Thresh( npImg[:,:,0:1]), npTruth[0][0,:,:,0:1]>0.5)
         F1, recall, precision, ErrorRate = Error.GenErrorRates(Error.Thresh(npImg[:,:,0:1]),  npTruth[0][0,:,:,0:1]>0.5)
-        pdConf = pdConf.append({'imagepath':sPath,
+        dfConf = dfConf.append({'imagepath':sPath,
                                 'fpr': FPR, 'fnr':FNR, 'auc':auc, 'f1':F1,
                                 'recall': recall, 'precision':precision,
                                 'Error Rate':ErrorRate,
@@ -160,7 +160,7 @@ def SavePredImgs(save_path, npPredImgs, GenTestInput, GenTestMask, lRange, lTiss
                                 'FP':FP,
                                 'FN':FN,
                                 'TN':TN}, ignore_index=True) 
-    return pdConf
+    return dfConf
 
 def SaveImage(sOutDir, npImage, lLegend, lLabels, sFileName = 'img.png'):
     """
