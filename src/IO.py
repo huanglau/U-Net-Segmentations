@@ -118,7 +118,7 @@ def SaveTrainingHistory(sOutDir, Model, history, TrainDir, ValDir, np1TestDir):
 def SavePredImgs(save_path, npPredImgs, GenTestInput, GenTestMask, lRange, lTissueType = ['RawIM', 'TCM'], lClasses = ['nucleus','other', 'lumen'], sFileType = 'png'):
     """ Saves images, and the input and truth images
     """
-    lLabels = ['TP','TN','FP','FN']
+    lLabels = ['TN','FP','FN','TP']
     dfConf = pd.DataFrame(columns = ['imagepath', 'fpr', 'fnr', 'auc', 'f1', 'recall', 'precision', 'Error Rate', 'optimal threshold', 'sensitivity', 'specificity', 'TN', 'TP', 'FP', 'FN'])
     
     # iterate through the prediction images
