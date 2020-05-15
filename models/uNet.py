@@ -47,21 +47,25 @@ def unet(lInputSize  = (256,256,3), iNumOutputCh = 1, bPadding = True):
 
     # up sampling 
     up6 = keras.layers.UpSampling2D(size = (2,2))(drop5)
+    upconv6 = keras.layers.Conv2D(512, 2, activation = 'relu', padding =  'same')(up6)
     merge6 = keras.layers.concatenate([conv4, up6], axis = 3)
     conv6 = keras.layers.Conv2D(512, 3, activation = 'relu', padding = sPadding, kernel_initializer = 'he_normal')(merge6)
     conv6 = keras.layers.Conv2D(512, 3, activation = 'relu', padding = sPadding, kernel_initializer = 'he_normal')(conv6)
 
     up7 = keras.layers.UpSampling2D(size = (2,2))(conv6)
+    upcon7 = keras.layers.Conv2D(512, 2, activation = 'relu', padding =  'same')(up7)
     merge7 = keras.layers.concatenate([conv3, up7], axis = 3)    
     conv7 = keras.layers.Conv2D(256, 3, activation = 'relu', padding = sPadding, kernel_initializer = 'he_normal')(merge7)
     conv7 = keras.layers.Conv2D(256, 3, activation = 'relu', padding = sPadding, kernel_initializer = 'he_normal')(conv7)
 
     up8 = keras.layers.UpSampling2D(size = (2,2))(conv7)
+    upconv8 = keras.layers.Conv2D(512, 2, activation = 'relu', padding =  'same')(up8)
     merge8 = keras.layers.concatenate([conv2, up8], axis = 3)
     conv8 = keras.layers.Conv2D(128, 3, activation = 'relu', padding = sPadding, kernel_initializer = 'he_normal')(merge8)
     conv8 = keras.layers.Conv2D(128, 3, activation = 'relu', padding = sPadding, kernel_initializer = 'he_normal')(conv8)
 
     up9 = keras.layers.UpSampling2D(size = (2,2))(conv8)
+    upconv9 = keras.layers.Conv2D(512, 2, activation = 'relu', padding =  'same')(up9)    
     merge9 = keras.layers.concatenate([conv1, up9], axis = 3)
     conv9 = keras.layers.Conv2D(64, 3, activation = 'relu', padding = sPadding, kernel_initializer = 'he_normal')(merge9)
     conv9 = keras.layers.Conv2D(64, 3, activation = 'relu', padding = sPadding, kernel_initializer = 'he_normal')(conv9)
