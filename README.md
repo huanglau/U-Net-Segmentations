@@ -1,5 +1,5 @@
 # Segmentation
-Segmentation in keras in a medical imaging context using U-Net.
+Segmentation in keras in a medical imaging context using U-Net. Tested with Keras v.2.3.1.
 
 Includes unit tests for error metrics.
 

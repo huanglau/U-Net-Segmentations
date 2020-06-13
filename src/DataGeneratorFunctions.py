@@ -144,12 +144,6 @@ def MaskCheck(genX1, genX2, sRootDir1, sRootDir2):
     # check random transforms
     if genX1.transform_parameters != genX1.transform_parameters:
         raise ValueError('Image pairs did not have the same transforms applied')
-        
-    # check file names and paths
-    # lFileSubPaths1 = [sDir.split(sRootDir1) for sDir in npFilePaths1[0]]    
-    # lFileSubPaths2 = [sDir.split(sRootDir2) for sDir in npFilePaths2[0]]    
-    # if not(lFileSubPaths1 == lFileSubPaths2) :
-    #     raise ValueError("paths of the pairs do not match")
     
     # check number of images
     if genX1.n == 0 or genX2.n == 0 :
