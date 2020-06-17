@@ -15,7 +15,7 @@ autopep8=1.4.4=py_0
 babel=2.8.0=py_0
 backcall=0.1.0=py37_0
 blas=1.0=mkl
-bleach=3.1.0=py37_0
+bleach=3.1.4=py37_0
 blinker=1.4=py37_0
 bzip2=1.0.8=h7b6447c_0
 c-ares=1.15.0=h7b6447c_1001
